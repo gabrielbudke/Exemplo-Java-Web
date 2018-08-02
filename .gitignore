@@ -2,3 +2,7 @@
 *.xml
 *.properties
 WebExemplo01/src/conf/MANIFEST.MF
+/WebExemplo02/nbproject/private/
+/WebExemplo02/build/
+*.MF
+/WebExemplo01/build/
