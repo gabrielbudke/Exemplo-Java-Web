@@ -7,6 +7,7 @@ package br.com.entra21java.dao;
 
 import br.com.entra21java.database.Conexao;
 import br.com.entra21java.bean.AlimentoBean;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -37,10 +38,35 @@ public class AlimentoDAO {
         } catch (SQLException e) {
             e.printStackTrace();
 
-        }finally{
+        } finally {
             Conexao.fecharConexao();
         }
         return alimentos;
+    }
+
+    public int adicionar(AlimentoBean alimento) {
+        String sql = "INSET INTO alimentos(nome, quantidade, preco, descricao) VALUES (?,?,?,?)";
+
+        try {
+            PreparedStatement ps = Conexao.obterConexao().prepareStatement(sql, 
+                    PreparedStatement.RETURN_GENERATED_KEYS);
+            int quantidade = 1;
+            ps.setString(quantidade++, alimento.getNome());
+            ps.setByte(quantidade++, alimento.getQuantidade());
+            ps.setDouble(quantidade++, alimento.getPreco());
+            ps.setString(quantidade++, alimento.getDescricao());
+            ps.execute();
+            ResultSet resultSet = ps.getGeneratedKeys();
+            if (resultSet.next()) {
+                return resultSet.getInt(1);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            Conexao.fecharConexao();
+        }
+        return -1;
     }
 
 }
